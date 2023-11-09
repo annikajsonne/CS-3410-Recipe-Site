@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ... Head content ... -->
+</head>
+<body>
+  <h1>Manage Recipes</h1>
+  <div>
+    <% recipes.forEach(function(recipe) { %>
+      <div class="recipe">
+        <h2><%= recipe.name %></h2>
+        <!-- ... Other recipe details ... -->
+        <a href="/edit-recipe/<%= recipe._id %>">Edit</a>
+      </div>
+    <% }); %>
+  </div>
+</body>
+</html>

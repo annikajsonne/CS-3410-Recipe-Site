@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Recipe Feed</title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <h1>Recipe Feed</h1>
+
+  <!-- Navigation for sorting -->
+  <nav>
+    <button id="popular-recipes">Popular</button> |
+    <button id="recent-recipes">Recent</button>
+  </nav>
+
+  <!-- Container for recipes -->
+  <div id="recipes-container">
+    <!-- Initially loaded recipes will go here -->
+    <% recipes.forEach(function(recipe) { %>
+      <div class="recipe">
+        <h2><%= recipe.name %></h2>
+        <!-- Include other details you want to show for each recipe -->
+        <p><%= recipe.likes.length %> likes</p>
+        <!-- ... -->
+      </div>
+    <% }); %>
+  </div>
+
+  <script>
+    $(document).ready(function() {
+      // Function to fetch and display recipes
+      function fetchRecipes(url) {
+        $.ajax({
+          url: url,
+          type: 'GET',
+          success: function(data) {
+            // Assuming 'data' is the HTML content for the recipe list
+            $('#recipes-container').html(data);
+          },
+          error: function(error) {
+            // Handle errors here
+            console.error('Error:', error);
+            alert('An error occurred while loading recipes.');
+          }
+        });
+      }
+
+      // Event listener for the Popular button
+      $('#popular-recipes').click(function() {
+        fetchRecipes('/recipes/feed/popular');
+      });
+
+      // Event listener for the Recent button
+      $('#recent-recipes').click(function() {
+        fetchRecipes('/recipes/feed/recent');
+      });
+    });
+  </script>
+</body>
+</html>

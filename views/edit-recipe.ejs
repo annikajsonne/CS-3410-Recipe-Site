@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- ... Head content ... -->
+</head>
+<body>
+  <h1>Edit Recipe: <%= recipe.name %></h1>
+  <form id="editRecipeForm" action="/update-recipe/<%= recipe._id %>" method="post" enctype="multipart/form-data">
+    <!-- Similar to create-recipe.ejs, prefill form fields with recipe data -->
+    <input type="hidden" name="_id" value="<%= recipe._id %>">
+    <!-- ... Other form fields ... -->
+    <input type="submit" value="Update Recipe">
+  </form>
+</body>
+</html>

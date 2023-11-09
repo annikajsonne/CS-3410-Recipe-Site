@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= recipe.name %></title>
+  <link rel="stylesheet" href="/css/styles.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+</head>
+<body>
+  <div class="recipe">
+    <h2><%= recipe.name %></h2>
+    <p><%= recipe.description %></p>
+    
+    <!-- Displaying the image if it exists -->
+    <% if(recipe.image) { %>
+      <img src="<%= recipe.image %>" alt="<%= recipe.name %>" class="recipe-image">
+    <% } %>
+
+    <h3>Ingredients:</h3>
+    <ul>
+      <% recipe.ingredients.forEach(function(ingredient) { %>
+        <li><%= ingredient %></li>
+      <% }); %>
+    </ul>
+
+    <h3>Instructions:</h3>
+    <ol>
+      <% recipe.steps.forEach(function(step) { %>
+        <li><%= step %></li>
+      <% }); %>
+    </ol>
+
+    <p><strong>Cooking Time:</strong> <%= recipe.cookingTime %> minutes</p>
+
+    <!-- Like Button -->
+    <button onclick="likeRecipe('<%= recipe._id %>')">Like</button>
+    <span id="like-count"><%= recipe.likes.length %> likes</span>
+
+    <!-- Comment Form -->
+    <form id="comment-form" onsubmit="postComment('<%= recipe._id %>'); return false;">
+      <input type="text" id="username" name="username" placeholder="Enter your username" required>
+      <textarea id="comment-text" name="comment" placeholder="Write your comment" required></textarea>
+      <input type="submit" value="Comment">
+    </form>
+
+    <!-- Comments Section -->
+    <div id="comments-section">
+      <% recipe.comments.forEach(function(comment) { %>
+        <div class="comment">
+          <strong><%= comment.username %></strong>
+          <p><%= comment.text %></p>
+        </div>
+      <% }); %>
+    </div>
+
+  </div>
+
+  <script>
+    function likeRecipe(recipeId) {
+      const username = prompt("Please enter your username to like this recipe:");
+      if (username) {
+        $.post(`/like-recipe/${recipeId}`, { username: username }, function(data) {
+          $('#like-count').text(`${data.likes} likes`);
+        }).fail(function(response) {
+          alert(response.responseJSON.message);
+        });
+      }
+    }
+
+    function postComment(recipeId) {
+      const username = $('#username').val();
+      const commentText = $('#comment-text').val();
+      
+      $.post(`/comment-recipe/${recipeId}`, { username: username, comment: commentText }, function(comments) {
+        // Update the comments section of the page
+        let commentsHtml = '';
+        comments.forEach(function(comment) {
+          commentsHtml += '<div class="comment">' +
+                            '<strong>' + comment.username + '</strong>' +
+                            '<p>' + comment.text + '</p>' +
+                          '</div>';
+        });
+        $('#comments-section').html(commentsHtml);
+        // Clear the input fields
+        $('#username').val('');
+        $('#comment-text').val('');
+      }).fail(function(response) {
+        alert("Failed to post comment.");
+      });
+    }
+  </script>
+
+</body>
+</html>

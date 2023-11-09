@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- ... your head tags -->
+    <title>Recipe Created</title>
+</head>
+
+<body>
+    <h1>Recipe Created Successfully!</h1>
+    <p>Recipe Name: <%= recipe.name %>
+    </p>
+    <p>Ingredients: <%= recipe.ingredients %>
+    </p>
+    <p>Steps: <%= recipe.steps %>
+    </p>
+    <p>Cooking Time: <%= recipe.cookingTime %>
+    </p>
+    <% if (recipe.image) { %>
+        <img src="<%= recipe.image %>" alt="Recipe Image">
+        <% } %>
+            <a href="/">Go back to home</a>
+</body>
+
+</html>

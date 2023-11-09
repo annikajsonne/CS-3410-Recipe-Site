@@ -1,0 +1,9 @@
+<% recipes.forEach(function(recipe) { %>
+    <div class="recipe">
+      <h2><%= recipe.name %></h2>
+      <!-- Include other details you want to show for each recipe -->
+      <p><%= recipe.likes.length %> likes</p>
+      <!-- ... -->
+    </div>
+  <% }); %>
+  
