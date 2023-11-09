@@ -3,9 +3,8 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const multer = require('multer');
 const path = require('path');
-const Recipe = require('./models/recipe'); // Replace with the path to your Recipe model
+const Recipe = require('./models/recipe'); 
 
-// Set up Express app
 const app = express();
 
 // Connect to MongoDB
