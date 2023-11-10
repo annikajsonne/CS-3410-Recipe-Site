@@ -7,7 +7,7 @@ const Recipe = require('./models/recipe');
 
 const app = express();
 
-// Connect to MongoDB
+
 mongoose.connect('mongodb://localhost/recipeDB', { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'MongoDB connection error:'));
@@ -15,18 +15,16 @@ db.once('open', () => {
     console.log('Connected to MongoDB');
 });
 
-// Set EJS as templating engine
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 
-// Use bodyParser to parse application/x-www-form-urlencoded
+
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// Serve static files from the 'public' directory
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Multer configuration for file uploads
 const storage = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, 'uploads/'); // Make sure the 'uploads' directory exists
@@ -37,24 +35,44 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage: storage });
 
+app.get('/', (req, res) => {
+  Recipe.find({}).sort({ 'createdAt': -1 }).exec()
+    .then(recipes => {
+      res.render('recipe-feed', { recipes: recipes, title: "Recent Recipes" });
+    })
+    .catch(err => {
+      console.error(err);
+      res.status(500).send('An error occurred while fetching recent recipes.');
+    });
+});
+
+
 // Route to display the recipe creation form
-app.get('/create-recipe', (req, res) => {
-    res.render('create-recipe'); // Points to create-recipe.ejs in your views directory
+app.get('/recipe-creation', (req, res) => {
+    res.render('recipe-creation'); // Points to create-recipe.ejs in your views directory
 });
 
 // Route to handle recipe creation
-app.post('/create-recipe', upload.single('image'), (req, res) => {
-    const newRecipe = new Recipe({
-        name: req.body.name,
-        ingredients: req.body.ingredients,
-        steps: req.body.steps,
-        cookingTime: req.body.time,
-        image: req.file ? req.file.path : ''
-    });
+app.post('/recipe-creation', upload.single('image'), (req, res) => {
+  // Create a new recipe using the form data
+  const newRecipe = new Recipe({
+      name: req.body.name,
+      ingredients: req.body.ingredients,
+      steps: req.body.steps,
+      cookingTime: req.body.time,
+      image: req.file ? req.file.path : '' // Make sure you handle the file upload correctly
+  });
 
-    newRecipe.save()
-        .then(recipe => res.render('recipe-success', { recipe: recipe })) // Render the success template
-        .catch(error => res.render('recipe-failure', { error: error.message })); // Render the error template
+  // Save the new recipe to the database
+  newRecipe.save()
+      .then(() => {
+          // Redirect to the recipe feed page or render a success message
+          res.redirect('/'); // Redirect to the main page for simplicity
+      })
+      .catch(err => {
+          console.error(err);
+          res.status(500).send("Error creating recipe.");
+      });
 });
 
 // Route to handle displaying the recipes
