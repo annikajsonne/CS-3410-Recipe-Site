@@ -1,0 +1,26 @@
+<%- include('partials/header') %>
+
+<% Object.keys(categorizedRecipes).forEach(function(category) { %>
+    <h1><%= category %> Recipes</h2>
+    <div>
+        <% categorizedRecipes[category].forEach(function(recipe) { %>
+          <div class="recipe" style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+            <div style="flex: 1; margin-right: 20px;">
+              <h2><%= recipe.name %></h2>
+              <!-- <p><%- recipe.ingredients.replace(/\n/g, '<br>') %></p>
+              <p><%- recipe.steps.replace(/\n/g, '<br>') %></p>
+              <p>Cooking Time: <%= recipe.cookingTime %></p> -->
+              <span id="likes-count-<%= recipe._id %>"><%= recipe.likes.length %> likes</span>
+              <button onclick="likeRecipe('<%= recipe._id %>')">Like</button>
+              <a href="/recipes/<%= recipe._id %>">View Recipe</a>
+            </div>
+            <!-- <div style="flex: 1; max-width: 300px;">
+              <img src="/uploads/<%= recipe.image %>" alt="Image of <%= recipe.name %>" style="width: 100%; height: 300px; object-fit: cover;">
+            </div> -->
+          </div>
+        <% }); %>
+        <% if(categorizedRecipes[category].length === 0) { %>
+            <p>No recipes found in this category.</p>
+        <% } %>
+    </div>
+<% }); %>
