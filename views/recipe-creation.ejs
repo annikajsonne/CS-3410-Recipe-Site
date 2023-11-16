@@ -1,42 +1,47 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Recipe</title>
-    <link rel="stylesheet" href="/css/styles.css"> <!-- Link to your CSS file -->
-</head>
-<body>
+<%- include('partials/header') %> <!-- Correct syntax -->
     <h1>Create Your Recipe</h1>
     <form id="recipeForm" action="/recipe-creation" method="post" enctype="multipart/form-data">
         <div>
             <label for="name">Recipe Name:</label>
             <input type="text" id="name" name="name" required>
         </div>
-        
+        <br>
         <div>
             <label for="ingredients">Ingredients:</label>
             <textarea id="ingredients" name="ingredients" required></textarea>
         </div>
-        
+        <br>
         <div>
             <label for="steps">Cooking Steps:</label>
             <textarea id="steps" name="steps" required></textarea>
         </div>
-        
+        <br>
         <div>
             <label for="time">Cooking Time:</label>
             <input type="text" id="time" name="time" required>
         </div>
-        
+        <br>
+        <div>
+            <label for="category">Category:</label>
+            <select id="category" name="category">
+                <option value="">--Please choose an option--</option>
+                <option value="Breakfast">Breakfast</option>
+                <option value="Lunch">Lunch</option>
+                <option value="Dinner">Dinner</option>
+                <option value="Snack">Snack</option>
+                <option value="Dessert">Dessert</option>
+            </select>
+        </div>
+        <br>
         <div>
             <label for="image">Image:</label>
             <input type="file" id="image" name="image">
         </div>
-        
+        <br>
         <div>
             <input type="submit" value="Create Recipe">
         </div>
     </form>
 </body>
+
 </html>

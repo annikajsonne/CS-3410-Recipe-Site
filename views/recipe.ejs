@@ -1,58 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><%= recipe.name %></title>
-  <link rel="stylesheet" href="/css/styles.css">
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-<body>
+<%- include('partials/header') %> <!-- Correct syntax -->
   <div class="recipe">
-    <h2><%= recipe.name %></h2>
-    <p><%= recipe.description %></p>
-    
+    <h2>
+      <%= recipe.name %>
+    </h2>
+
+    <h3>Ingredients:</h3>
+    <p><%- recipe.ingredients.replace(/\n/g, '<br>' ) %></p>
+    <p><%- recipe.steps.replace(/\n/g, '<br>' ) %></p>
+    <p>Cooking Time: <%= recipe.cookingTime %>
+    </p>
+    <!-- <p>Category: <%= recipe.category %></p> -->
     <!-- Displaying the image if it exists -->
     <% if(recipe.image) { %>
       <img src="<%= recipe.image %>" alt="<%= recipe.name %>" class="recipe-image">
-    <% } %>
+      <br>
+      <% } %>
+        <br>
+        <span id="likes-count-<%= recipe._id %>">
+          <%= recipe.likes.length %> likes
+        </span>
+        <button onclick="likeRecipe('<%= recipe._id %>')">Like</button>
 
-    <h3>Ingredients:</h3>
-    <ul>
-      <% recipe.ingredients.forEach(function(ingredient) { %>
-        <li><%= ingredient %></li>
-      <% }); %>
-    </ul>
+        <!-- Comment Form -->
+        <form id="comment-form" onsubmit="postComment('<%= recipe._id %>'); return false;">
+          <input type="text" id="username" name="username" placeholder="Enter your username" required>
+          <br>
+          <textarea id="comment-text" name="comment" placeholder="Write your comment" required></textarea>
+          <br>
+          <input type="submit" value="Comment">
+        </form>
 
-    <h3>Instructions:</h3>
-    <ol>
-      <% recipe.steps.forEach(function(step) { %>
-        <li><%= step %></li>
-      <% }); %>
-    </ol>
-
-    <p><strong>Cooking Time:</strong> <%= recipe.cookingTime %> minutes</p>
-
-    <!-- Like Button -->
-    <button onclick="likeRecipe('<%= recipe._id %>')">Like</button>
-    <span id="like-count"><%= recipe.likes.length %> likes</span>
-
-    <!-- Comment Form -->
-    <form id="comment-form" onsubmit="postComment('<%= recipe._id %>'); return false;">
-      <input type="text" id="username" name="username" placeholder="Enter your username" required>
-      <textarea id="comment-text" name="comment" placeholder="Write your comment" required></textarea>
-      <input type="submit" value="Comment">
-    </form>
-
-    <!-- Comments Section -->
-    <div id="comments-section">
-      <% recipe.comments.forEach(function(comment) { %>
-        <div class="comment">
-          <strong><%= comment.username %></strong>
-          <p><%= comment.text %></p>
+        <!-- Comments Section -->
+        <div id="comments-section">
+          <% recipe.comments.forEach(function(comment) { %>
+            <div class="comment">
+              <strong>
+                <%= comment.username %>
+              </strong>
+              <p>
+                <%= comment.text %>
+              </p>
+            </div>
+            <% }); %>
         </div>
-      <% }); %>
-    </div>
 
   </div>
 
@@ -60,36 +50,55 @@
     function likeRecipe(recipeId) {
       const username = prompt("Please enter your username to like this recipe:");
       if (username) {
-        $.post(`/like-recipe/${recipeId}`, { username: username }, function(data) {
-          $('#like-count').text(`${data.likes} likes`);
-        }).fail(function(response) {
-          alert(response.responseJSON.message);
+        $.ajax({
+          url: `/like-recipe/${recipeId}`,
+          method: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify({ username: username }),
+          success: function (data) {
+            // Correct the ID selector to match the updated like count span
+            $(`#likes-count-${recipeId}`).text(`${data.likes} likes`);
+          },
+          error: function (xhr) {
+            // Log the full error to the console for debugging
+            console.error("Error liking recipe:", xhr.responseText);
+            // Display a user-friendly message
+            alert("Failed to like recipe. Please try again later.");
+          }
         });
       }
     }
-
     function postComment(recipeId) {
       const username = $('#username').val();
       const commentText = $('#comment-text').val();
-      
-      $.post(`/comment-recipe/${recipeId}`, { username: username, comment: commentText }, function(comments) {
-        // Update the comments section of the page
-        let commentsHtml = '';
-        comments.forEach(function(comment) {
-          commentsHtml += '<div class="comment">' +
-                            '<strong>' + comment.username + '</strong>' +
-                            '<p>' + comment.text + '</p>' +
-                          '</div>';
-        });
-        $('#comments-section').html(commentsHtml);
-        // Clear the input fields
-        $('#username').val('');
-        $('#comment-text').val('');
-      }).fail(function(response) {
-        alert("Failed to post comment.");
+
+      $.ajax({
+        url: `/comment-recipe/${recipeId}`,
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ username: username, comment: commentText }),
+        success: function (comments) {
+          // Update the comments section of the page
+          let commentsHtml = '';
+          comments.forEach(function (comment) {
+            commentsHtml += '<div class="comment">' +
+              '<strong>' + comment.username + '</strong>' +
+              '<p>' + comment.text + '</p>' +
+              '</div>';
+          });
+          $('#comments-section').html(commentsHtml);
+          // Clear the input fields
+          $('#username').val('');
+          $('#comment-text').val('');
+        },
+        error: function (response) {
+          alert("Failed to post comment: " + response.responseText);
+        }
       });
     }
+
   </script>
 
 </body>
+
 </html>

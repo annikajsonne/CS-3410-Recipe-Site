@@ -8,8 +8,8 @@ const recipeSchema = new Schema({
   cookingTime: { type: String, required: true },
   category: { 
     type: String, 
-    required: true, 
-    enum: ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Dessert'] // Example categories
+    required: false, 
+    enum: ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Dessert']
   },
   image: { type: String, required: false },
   likes: [String], // Array of usernames who liked the recipe
@@ -18,6 +18,8 @@ const recipeSchema = new Schema({
     text: String,
     createdAt: { type: Date, default: Date.now }
   }]
+}, {
+  timestamps: true // This is the correct placement for timestamps
 });
 
 const Recipe = mongoose.model('Recipe', recipeSchema);
