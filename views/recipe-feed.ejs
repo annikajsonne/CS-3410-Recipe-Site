@@ -29,7 +29,7 @@
           <a href="/recipes/<%= recipe._id %>">View Recipe</a>
         </div>
         <div style="flex: 1; max-width: 300px;">
-          <img src="/uploads/<%= recipe.image %>" alt="Image of <%= recipe.name %>"
+          <img src="/uploads/<%= recipe.image.split('/')[8] %>" alt="Image of <%= recipe.name %>"
             style="width: 100%; height: 300px; object-fit: cover;">
         </div>
       </div>
