@@ -212,8 +212,6 @@ app.post('/comment-recipe/:id', (req, res) => {
     });
 });
 
-
-
 // For sorting by popularity (assuming 'likes' is an array field)
 app.get('/recipes/feed/popular', (req, res) => {
   Recipe.aggregate([
@@ -229,7 +227,6 @@ app.get('/recipes/feed/popular', (req, res) => {
   });
 });
 
-
 // For sorting by recency (assuming there is a field like 'createdAt' or 'updatedAt')
 app.get('/recipes/feed/recent', (req, res) => {
   Recipe.find({}).sort({ 'createdAt': -1 })
@@ -242,45 +239,27 @@ app.get('/recipes/feed/recent', (req, res) => {
     });
 });
 
-// Define your categories array without 'Uncategorized'
-const categories = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Dessert'];
+function convertCookingTimeToMinutes(cookingTimeString) {
+  const match = cookingTimeString.match(/(\d+)\s*minutes/);
+  return match ? parseInt(match[1]) : 0; // Default to 0 if no match
+}
 
-// Render the categories view, which will display links to each category
-app.get('/categories', (req, res) => {
-  res.render('categories', { categories: categories });
-});
-
-// Route to handle requests for recipes by a specific category
-app.get('/recipes/category/:category', (req, res) => {
-  const category = req.params.category;
-  // Define the query based on whether the category is 'uncategorized' or a specific category
-  let query = category === 'uncategorized' ? { category: { $exists: false } } : { category: category };
-
-  Recipe.find(query).exec()
+//for sorting by cooking time
+app.get('/recipes/feed/shortest-cooking-time', (req, res) => {
+  Recipe.find({})
     .then(recipes => {
-      // Render the recipe list partial with the categorized recipes
-      res.render('partials/recipe-list', { recipes: recipes, title: `Recipes: ${category}` });
+      recipes.forEach(recipe => {
+        recipe.cookingTimeMinutes = convertCookingTimeToMinutes(recipe.cookingTime);
+      });
+      recipes.sort((a, b) => a.cookingTimeMinutes - b.cookingTimeMinutes);
+      res.render('partials/recipe-list', { recipes: recipes });
     })
     .catch(err => {
       console.error(err);
-      res.status(500).send('An error occurred while fetching recipes.');
+      res.status(500).send('An error occurred while fetching recipes sorted by cooking time.');
     });
 });
 
-// Route to handle requests for uncategorized recipes
-app.get('/recipes/uncategorized', (req, res) => {
-  Recipe.find({ category: { $exists: false } }) // Logic to find uncategorized recipes
-    .then(recipes => {
-      // Render the recipe list partial with the uncategorized recipes
-      res.render('partials/recipe-list', { recipes: recipes, title: 'Uncategorized Recipes' });
-    })
-    .catch(err => {
-      console.error(err);
-      res.status(500).send('An error occurred while fetching uncategorized recipes.');
-    });
-});
-
-console.log(path.join(__dirname, 'views')); // This should output the absolute path to your views directory
 // Start the server
 const PORT = 3000;
 app.listen(PORT, () => {

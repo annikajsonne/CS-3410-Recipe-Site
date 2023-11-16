@@ -1,31 +1,39 @@
-<%- include('partials/header') %> 
-<center>
-  <h1>Recipe Feed</h1>
+<%- include('partials/header') %>
+  <center>
+    <h1>Recipe Feed</h1>
 
-  <!-- Navigation for sorting -->
-  <nav>
-    <button id="popular-recipes">Popular</button> |
-    <button id="recent-recipes">Recent</button>
-  </nav>
-</center>
-<br>
+    <!-- Navigation for sorting -->
+    <nav>
+      <button id="popular-recipes">Popular</button> |
+      <button id="recent-recipes">Recent</button> |
+      <button id="shortest-cooking-time">Cooking Time</button>
+    </nav>
+  </center>
+  <br>
   <div id="recipes-container">
     <% recipes.forEach(function(recipe) { %>
-      <div class="recipe" style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+      <div class="recipe"
+        style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
         <div style="flex: 1; margin-right: 20px;">
-          <h2><%= recipe.name %></h2>
-          <p><%- recipe.ingredients.replace(/\n/g, '<br>') %></p>
-          <p><%- recipe.steps.replace(/\n/g, '<br>') %></p>
-          <p>Cooking Time: <%= recipe.cookingTime %></p>
-          <span id="likes-count-<%= recipe._id %>"><%= recipe.likes.length %> likes</span>
+          <h2>
+            <%= recipe.name %>
+          </h2>
+          <p><%- recipe.ingredients.replace(/\n/g, '<br>' ) %></p>
+          <p><%- recipe.steps.replace(/\n/g, '<br>' ) %></p>
+          <p>Cooking Time: <%= recipe.cookingTime %>
+          </p>
+          <span id="likes-count-<%= recipe._id %>">
+            <%= recipe.likes.length %> likes
+          </span>
           <button onclick="likeRecipe('<%= recipe._id %>')">Like</button>
           <a href="/recipes/<%= recipe._id %>">View Recipe</a>
         </div>
         <div style="flex: 1; max-width: 300px;">
-          <img src="/uploads/<%= recipe.image %>" alt="Image of <%= recipe.name %>" style="width: 100%; height: 300px; object-fit: cover;">
+          <img src="/uploads/<%= recipe.image %>" alt="Image of <%= recipe.name %>"
+            style="width: 100%; height: 300px; object-fit: cover;">
         </div>
       </div>
-    <% }); %>
+      <% }); %>
   </div>
 
 
@@ -57,7 +65,18 @@
       $('#recent-recipes').click(function () {
         fetchRecipes('/recipes/feed/recent');
       });
+
+      $('#shortest-cooking-time').click(function () {
+        fetchRecipes('/recipes/feed/shortest-cooking-time');
+      });
     });
+
+    function convertCookingTimeToMinutes(cookingTimeString) {
+      // Assuming the format is always "<number> minutes"
+      const match = cookingTimeString.match(/(\d+)\s*minutes/);
+      return match ? parseInt(match[1]) : 0; // Default to 0 if no match
+    }
+
     function likeRecipe(recipeId) {
       const username = prompt("Please enter your username to like this recipe:");
       if (username) {
@@ -80,6 +99,6 @@
       }
     }
   </script>
-</body>
+  </body>
 
-</html>
+  </html>
