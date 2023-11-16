@@ -151,6 +151,18 @@ app.post('/update-recipe/:id', upload.single('image'), (req, res) => {
     });
 });
 
+app.get('/categories', async (req, res) => {
+  const categories = ['Breakfast', 'Lunch', 'Dinner', 'Snack', 'Dessert', 'Uncategorized'];
+  let categorizedRecipes = {};
+
+  for (const category of categories) {
+      categorizedRecipes[category] = await Recipe.find({ 
+          category: category === 'Uncategorized' ? { $exists: false } : category 
+      }).exec();
+  }
+
+  res.render('categories', { categorizedRecipes });
+});
 
 app.post('/like-recipe/:id', (req, res) => {
   const recipeId = req.params.id;

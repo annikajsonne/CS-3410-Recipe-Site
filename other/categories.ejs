@@ -1,9 +1,0 @@
-<%- include('partials/header') %>
-<h1>Recipe Categories</h1>
-<ul>
-  <% categories.forEach(function(category) { %>
-    <li><a href="/recipes/category/<%= category.toLowerCase() %>"><%= category %></a></li>
-  <% }); %>
-  <!-- Manually add a link to uncategorized recipes -->
-  <li><a href="/recipes/uncategorized">Uncategorized</a></li>
-</ul>
