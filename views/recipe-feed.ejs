@@ -1,7 +1,6 @@
 <%- include('partials/header') %>
   <center>
-    <h1>Recipe Feed</h1>
-
+    <h1 style="text-align: center; text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;">Recipe Feed</h1>
     <!-- Navigation for sorting -->
     <nav>
       <button id="popular-recipes">Popular</button> |
@@ -12,8 +11,7 @@
   <br>
   <div id="recipes-container">
     <% recipes.forEach(function(recipe) { %>
-      <div class="recipe"
-        style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+      <div class="recipe">
         <div style="flex: 1; margin-right: 20px;">
           <h2>
             <%= recipe.name %>

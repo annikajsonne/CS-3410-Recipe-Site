@@ -4,7 +4,7 @@
     <h1><%= category %> Recipes</h2>
     <div>
         <% categorizedRecipes[category].forEach(function(recipe) { %>
-          <div class="recipe" style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 20px; border: 1px solid #ccc; padding: 15px; border-radius: 8px;">
+          <div class="recipe" style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 20px; border: 1px solid white; padding: 15px; border-radius: 8px;">
             <div style="flex: 1; margin-right: 20px;">
               <h2><%= recipe.name %></h2>
               <!-- <p><%- recipe.ingredients.replace(/\n/g, '<br>') %></p>
@@ -20,7 +20,9 @@
           </div>
         <% }); %>
         <% if(categorizedRecipes[category].length === 0) { %>
+          <div style="display: flex; align-items: start; justify-content: space-between; margin-bottom: 20px; background-color: #ccc; padding: 15px; border-radius: 8px;">
             <p>No recipes found in this category.</p>
+          </div>
         <% } %>
     </div>
 <% }); %>

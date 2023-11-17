@@ -1,4 +1,5 @@
 <%- include('partials/header') %> <!-- Correct syntax -->
+  <h1 style="text-align: center;">Recipe</h1>
   <div class="recipe">
     <h2>
       <%= recipe.name %>
@@ -12,7 +13,10 @@
     <!-- <p>Category: <%= recipe.category %></p> -->
     <!-- Displaying the image if it exists -->
     <% if(recipe.image) { %>
-      <img src="<%= recipe.image %>" alt="<%= recipe.name %>" class="recipe-image">
+      <div style="flex: 1;">
+        <img src="/uploads/<%= recipe.image.split('/')[8] %>" alt="<%= recipe.name %>" class="recipe-image"
+          style="max-width: 200px; height: auto;">
+      </div>
       <br>
       <% } %>
         <br>
@@ -99,6 +103,6 @@
 
   </script>
 
-</body>
+  </body>
 
-</html>
+  </html>

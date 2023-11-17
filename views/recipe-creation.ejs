@@ -1,47 +1,51 @@
 <%- include('partials/header') %> <!-- Correct syntax -->
     <h1>Create Your Recipe</h1>
-    <form id="recipeForm" action="/recipe-creation" method="post" enctype="multipart/form-data">
-        <div>
-            <label for="name">Recipe Name:</label>
-            <input type="text" id="name" name="name" required>
-        </div>
-        <br>
-        <div>
-            <label for="ingredients">Ingredients:</label>
-            <textarea id="ingredients" name="ingredients" required></textarea>
-        </div>
-        <br>
-        <div>
-            <label for="steps">Cooking Steps:</label>
-            <textarea id="steps" name="steps" required></textarea>
-        </div>
-        <br>
-        <div>
-            <label for="time">Cooking Time:</label>
-            <input type="text" id="time" name="time" required>
-        </div>
-        <br>
-        <div>
-            <label for="category">Category:</label>
-            <select id="category" name="category">
-                <option value="">--Please choose an option--</option>
-                <option value="Breakfast">Breakfast</option>
-                <option value="Lunch">Lunch</option>
-                <option value="Dinner">Dinner</option>
-                <option value="Snack">Snack</option>
-                <option value="Dessert">Dessert</option>
-            </select>
-        </div>
-        <br>
-        <div>
-            <label for="image">Image:</label>
-            <input type="file" id="image" name="image">
-        </div>
-        <br>
-        <div>
-            <input type="submit" value="Create Recipe">
-        </div>
-    </form>
-</body>
+    <div style="display: flex; justify-content: center; padding: 20px;">
+        <form id="recipeForm" action="/recipe-creation" method="post" enctype="multipart/form-data"
+            style="background-color: white; padding: 20px; border-radius: 10px; max-width: 600px; width: 100%; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+            <div>
+                <label for="name">Recipe Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <br>
+            <div>
+                <label for="ingredients">Ingredients:</label>
+                <textarea id="ingredients" name="ingredients" required></textarea>
+            </div>
+            <br>
+            <div>
+                <label for="steps">Cooking Steps:</label>
+                <textarea id="steps" name="steps" required></textarea>
+            </div>
+            <br>
+            <div>
+                <label for="time">Cooking Time:</label>
+                <input type="text" id="time" name="time" required>
+            </div>
+            <br>
+            <div>
+                <label for="category">Category:</label>
+                <select id="category" name="category">
+                    <option value="">--Please choose an option--</option>
+                    <option value="Breakfast">Breakfast</option>
+                    <option value="Lunch">Lunch</option>
+                    <option value="Dinner">Dinner</option>
+                    <option value="Snack">Snack</option>
+                    <option value="Dessert">Dessert</option>
+                </select>
+            </div>
+            <br>
+            <div>
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="image">
+            </div>
+            <br>
+            <div>
+                <input type="submit" value="Create Recipe">
+            </div>
+        </form>
+    </div>
+    </center>
+    </body>
 
-</html>
+    </html>

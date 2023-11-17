@@ -12,13 +12,24 @@
     body {
       background-color: #FFDBE9;
     }
+
     h1 {
       font-variant: small-caps;
+      text-align: center;
+      text-shadow: -1px -1px 0 #fff, 1px -1px 0 #fff, -1px 1px 0 #fff, 1px 1px 0 #fff;
+
     }
+
     .recipe {
       background-color: white;
       padding: 10px;
+      align-items: start;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      padding: 15px;
+      border-radius: 8px;
     }
+
     .navbar-box {
       background-color: black;
       padding: 20px;
@@ -40,6 +51,21 @@
 </head>
 
 <body>
+  <!-- Color picker and Mode Selection -->
+  <div style="text-align: center; padding: 10px;">
+    <input type="color" id="colorPicker">
+    <select id="colorMode">
+      <option value="monochrome">Monochrome</option>
+      <option value="analogic">Analogic</option>
+      <option value="complement">Complement</option>
+      <option value="analogic-complement">Analogic Complement</option>
+      <option value="triad">Triad</option>
+      <option value="quad">Quad</option>
+    </select>
+    <button onclick="applyColorScheme()">Apply Color</button>
+  </div>
+
+
   <!-- Main navigation bar -->
   <div class="navbar-box">
     <nav class="navbar" role="navigation" aria-label="main navigation">
@@ -61,3 +87,43 @@
       </div>
     </nav>
   </div>
+  <script>
+    function applyColorScheme() {
+      var color = $('#colorPicker').val();
+      var mode = $('#colorMode').val();
+
+      $.ajax({
+        url: '/api/generate-scheme',
+        type: 'POST',
+        contentType: 'application/json',
+        data: JSON.stringify({ hex: color.substring(1), mode: mode, count: 3 }),
+        success: function (response) {
+          // Apply color scheme to different elements
+          $('body').css('background-color', response.colors[0].hex.value);
+          $('h1').css('color', response.colors[1].hex.value);
+          $('h2').css('color', response.colors[2].hex.value);
+          $('.navbar-box').css('background-color', response.colors[1].hex.value);
+          // Additional styling as needed...
+
+          // Save the color scheme to localStorage
+          localStorage.setItem('colorScheme', JSON.stringify(response.colors));
+        },
+        error: function (error) {
+          console.error('Error fetching color scheme:', error);
+        }
+      });
+    }
+    $(document).ready(function () {
+      // Check if a color scheme is saved in localStorage
+      var savedColorScheme = localStorage.getItem('colorScheme');
+      if (savedColorScheme) {
+        savedColorScheme = JSON.parse(savedColorScheme);
+        // Apply the saved color scheme
+        $('body').css('background-color', savedColorScheme[0].hex.value);
+        $('h1').css('color', savedColorScheme[1].hex.value);
+        $('h2').css('color', savedColorScheme[2].hex.value);
+        $('.navbar-box').css('background-color', savedColorScheme[1].hex.value);
+      }
+    });
+
+  </script>

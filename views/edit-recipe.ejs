@@ -1,43 +1,47 @@
 <%- include('partials/header') %> <!-- Correct syntax -->
   <h1>Edit Recipe: <%= recipe.name %>
   </h1>
-  <form id="editRecipeForm" action="/update-recipe/<%= recipe._id %>" method="post" enctype="multipart/form-data">
-    <div>
-      <label for="name">Recipe Name:</label>
+  <div style="display: flex; justify-content: center; padding: 20px;">
+    <form id="editRecipeForm" action="/update-recipe/<%= recipe._id %>" method="post" enctype="multipart/form-data"
+      style="background-color: white; padding: 20px; border-radius: 10px; max-width: 600px; width: 100%; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+      <div>
+        <label for=" name">Recipe Name:</label>
       <input type="text" id="name" name="name" required value="<%= recipe.name %>">
-    </div>
-    <div>
-      <label for="ingredients">Ingredients:</label>
-      <textarea id="ingredients" name="ingredients" required><%= recipe.ingredients %></textarea>
-    </div>
-    <div>
-      <label for="steps">Cooking Steps:</label>
-      <textarea id="steps" name="steps" required><%= recipe.steps %></textarea>
-    </div>
-    <div>
-      <label for="time">Cooking Time:</label>
-      <input type="text" id="time" name="time" required value="<%= recipe.cookingTime %>">
-    </div>
-    <div>
-      <label for="category">Category:</label>
-      <select id="category" name="category">
-        <option value="">--Please choose an option--</option>
-        <option value="Breakfast" <%=recipe.category=='Breakfast' ? 'selected' : '' %>>Breakfast</option>
-        <option value="Lunch" <%=recipe.category=='Lunch' ? 'selected' : '' %>>Lunch</option>
-        <option value="Dinner" <%=recipe.category=='Dinner' ? 'selected' : '' %>>Dinner</option>
-        <option value="Snack" <%=recipe.category=='Snack' ? 'selected' : '' %>>Snack</option>
-        <option value="Dessert" <%=recipe.category=='Dessert' ? 'selected' : '' %>>Dessert</option>
-      </select>
-    </div>
-    <div>
-      <label for="image">Image:</label>
-      <input type="file" id="image" name="image">
-      <% if(recipe.image) { %>
-        <img src="/uploads/<%= recipe.image %>" alt="Current Image" style="max-width: 300px; height: auto;">
-        <% } %>
-    </div>
-    <input type="submit" value="Update Recipe">
+  </div>
+  <div>
+    <label for="ingredients">Ingredients:</label>
+    <textarea id="ingredients" name="ingredients" required><%= recipe.ingredients %></textarea>
+  </div>
+  <div>
+    <label for="steps">Cooking Steps:</label>
+    <textarea id="steps" name="steps" required><%= recipe.steps %></textarea>
+  </div>
+  <div>
+    <label for="time">Cooking Time:</label>
+    <input type="text" id="time" name="time" required value="<%= recipe.cookingTime %>">
+  </div>
+  <div>
+    <label for="category">Category:</label>
+    <select id="category" name="category">
+      <option value="">--Please choose an option--</option>
+      <option value="Breakfast" <%=recipe.category=='Breakfast' ? 'selected' : '' %>>Breakfast</option>
+      <option value="Lunch" <%=recipe.category=='Lunch' ? 'selected' : '' %>>Lunch</option>
+      <option value="Dinner" <%=recipe.category=='Dinner' ? 'selected' : '' %>>Dinner</option>
+      <option value="Snack" <%=recipe.category=='Snack' ? 'selected' : '' %>>Snack</option>
+      <option value="Dessert" <%=recipe.category=='Dessert' ? 'selected' : '' %>>Dessert</option>
+    </select>
+  </div>
+  <div>
+    <label for="image">Image:</label>
+    <input type="file" id="image" name="image">
+    <% if(recipe.image) { %>
+      <img src="/uploads/<%= recipe.image.split('/')[8] %>" alt="Current Image" style="max-width: 200px; height: auto;">
+      <% } %>
+  </div>
+  <br>
+  <input type="submit" value="Update Recipe">
   </form>
+  </div>
   </body>
 
   </html>

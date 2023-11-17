@@ -2,7 +2,7 @@
   <h1>Manage Recipes</h1>
   <div>
     <% recipes.forEach(function(recipe) { %>
-      <div class="recipe">
+      <div class="recipe" style="align-items: start; justify-content: space-between; margin-bottom: 20px; border: 1px solid white; padding: 15px; border-radius: 8px;">
         <h2><%= recipe.name %></h2>
         <!-- ... Other recipe details ... -->
         <a href="/edit-recipe/<%= recipe._id %>">Edit</a>

@@ -5,6 +5,7 @@ const multer = require('multer');
 const path = require('path');
 const Recipe = require('./models/recipe');
 const app = express();
+const axios = require('axios');
 
 mongoose.connect('mongodb://localhost/recipeDB', { useNewUrlParser: true, useUnifiedTopology: true });
 const db = mongoose.connection;
@@ -259,6 +260,29 @@ app.get('/recipes/feed/shortest-cooking-time', (req, res) => {
       res.status(500).send('An error occurred while fetching recipes sorted by cooking time.');
     });
 });
+
+// Route to handle color scheme requests
+app.post('/api/generate-scheme', async (req, res) => {
+  try {
+    // Extract the color and other optional parameters from the request body
+    const { hex, mode, count } = req.body;
+
+    // Construct the API URL
+    const apiUrl = `https://www.thecolorapi.com/scheme?hex=${hex}&mode=${mode}&count=${count}&format=json`;
+
+    // Make the request to TheColorAPI
+    const response = await axios.get(apiUrl);
+
+    // Send the response back to the client
+    res.json(response.data);
+  } catch (error) {
+    console.error('Error fetching color scheme:', error);
+    res.status(500).send('Error fetching color scheme');
+  }
+});
+
+
+
 
 // Start the server
 const PORT = 3000;
